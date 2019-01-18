@@ -154,13 +154,10 @@ class HmIpCloudAccesspointAdapter extends utils.Adapter {
                 case 'setPointTemperature':
                     this._api.deviceConfigurationSetPointTemperature(o.native.id, state.val, o.native.channel)
                     break;
-                case 'shutterlevel':
-		            this._api.deviceControlSetShutterLevel(o.native.id, state.val, o.native.channel)
-		            break;	
-		        case 'changeOverDelay':
-		            //this._api.deviceConfigurationChangeOverDelay(o.native.id, state.val, o.native.channel)
-	                break;
-            }
+                case 'setShutterLevel':
+		    this._api.deviceControlSetShutterLevel(o.native.id, state.val, o.native.channel)
+		    break;	
+	    }
         }
     }
 
@@ -257,7 +254,6 @@ class HmIpCloudAccesspointAdapter extends utils.Adapter {
 		        promises.push(this.setStateAsync('devices.' + device.id + '.channels.1.selfCalibrationInProgress', device.functionalChannels['1'].selfCalibrationInProgress, true));
 		        promises.push(this.setStateAsync('devices.' + device.id + '.channels.1.topToBottomReferenceTime', device.functionalChannels['1'].topToBottomReferenceTime, true));
 		        promises.push(this.setStateAsync('devices.' + device.id + '.channels.1.bottomToTopReferenceTime', device.functionalChannels['1'].bottomToTopReferenceTime, true));
-		        promises.push(this.setStateAsync('devices.' + device.id + '.channels.1.changeOverDelay', device.functionalChannels['1'].changeOverDelay, true));
 		        promises.push(this.setStateAsync('devices.' + device.id + '.channels.1.endpositionAutoDetectionEnabled', device.functionalChannels['1'].endpositionAutoDetectionEnabled, true));
 		        break;
             }
@@ -373,15 +369,14 @@ class HmIpCloudAccesspointAdapter extends utils.Adapter {
             }
             case 'BRAND_SHUTTER': {
                 promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1', { type: 'channel', common: {}, native: {} }));
-               	promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.shutterLevel', { type: 'state', common: { name: 'shutterLevel', type: 'number', role: 'level', read: true, write: true }, native: { id: device.id, channel: 1, parameter: 'shutterlevel' } }));
-		        promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.previousShutterLevel', { type: 'state', common: { name: 'previousShutterLevel', type: 'string', role: 'info', read: true, write: false }, native: {} }));
+               	promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.shutterLevel', { type: 'state', common: { name: 'shutterLevel', type: 'number', role: 'level', read: true, write: true }, native: { id: device.id, channel: 1, parameter: 'setShutterLevel' } }));
+		promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.previousShutterLevel', { type: 'state', common: { name: 'previousShutterLevel', type: 'string', role: 'info', read: true, write: false }, native: {} }));
                 promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.processing', { type: 'state', common: { name: 'processing', type: 'string', role: 'info', read: true, write: false }, native: {} }));
                 promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.selfCalibrationInProgress', { type: 'state', common: { name: 'selfCalibrationInProgress', type: 'string', role: 'info', read: true, write: false }, native: {} }));
                 promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.topToBottomReferenceTime', { type: 'state', common: { name: 'topToBottomReferenceTime', type: 'number', role: 'seconds', read: true, write: false }, native: {} }));
                 promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.bottomToTopReferenceTime', { type: 'state', common: { name: 'bottomToTopReferenceTime', type: 'number', role: 'seconds', read: true, write: false }, native: {} }));
-               	promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.changeOverDelay', { type: 'state', common: { name: 'changeOverDelay', type: 'number', role: 'seconds', read: true, write: true }, native: { id: device.id, channel: 1, parameter: 'changeOverDelay' } }));
-                promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.endpositionAutoDetectionEnabled', { type: 'state', common: { name: 'endpositionAutoDetectionEnabled', type: 'string', role: 'switch', read: true, write: true }, native: { id: device.id, channel: 1, parameter: 'switchState' } }));
-		        break;
+               	promises.push(this.setObjectNotExistsAsync('devices.' + device.id + '.channels.1.endpositionAutoDetectionEnabled', { type: 'state', common: { name: 'endpositionAutoDetectionEnabled', type: 'string', role: 'switch', read: true, write: true }, native: { id: device.id, channel: 1, parameter: 'switchState' } }));
+		break;
             }
             default: {
                 this.log.debug("device - not implemented device :" + JSON.stringify(device));
